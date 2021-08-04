@@ -16,3 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/transaction/initialize', 'PaystackController@InitializeTransaction');
+Route::get('/transaction/verify_transaction/{reference?}', 'PaystackController@VerifyTransaction');
+Route::get('/transaction/list', 'PaystackController@ListTransaction');
+Route::get('/transaction/charge', 'PaystackController@charge');
