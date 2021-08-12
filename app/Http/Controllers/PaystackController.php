@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 
 class PaystackController extends Controller
 {
-    public function InitializeTransaction(){
+    public function InitializeTransaction(Request $request){
         $url = "https://api.paystack.co/transaction/initialize";
         $fields = [
-          'email' => "zulfikar@importi.co",
-          'amount' => "20000",
+          'email' => $request->email,
+          'amount' => $request->amount,
         ];
         $fields_string = http_build_query($fields);
         //open connection
@@ -23,15 +23,20 @@ class PaystackController extends Controller
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
           "Authorization: Bearer sk_test_dbfb5911c9068a24b3af958428d78c608490d667",
           "Cache-Control: no-cache",
-        //   "Content-Type: application/json"
+          // "Content-Type: application/json"
         ));
         
-        // So that curl_exec returns the contents of the cURL; rather than echoing it
         curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
         
         //execute post
-        $result = curl_exec($ch);
-        echo $result;
+        $response = curl_exec($ch);
+        $result = json_decode($response);
+
+        if ($result) {
+            $pay = $result->data->authorization_url;
+            
+            return redirect($pay);
+        }
     }
 
     public function VerifyTransaction(){
