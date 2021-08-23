@@ -11,6 +11,17 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('paystack');
 });
+
+
+
+
+Route::post('/transaction/initialize', 'PaystackController@InitializeTransaction');
+Route::get('/verify/transaction', 'PaystackController@VerifyTransaction');
+
+Route::get('/pay', 'PaystackJsController@index');
+Route::get('pay/verify/transaction', 'PaystackJsController@VerifyTransaction');
